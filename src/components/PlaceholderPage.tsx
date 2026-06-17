@@ -1,19 +1,28 @@
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
-export default function PlaceholderPage({ title, description }: { title: string; description: string }) {
+interface PlaceholderPageProps {
+  title: string;
+  description: string;
+}
+
+export default function PlaceholderPage({ title, description }: PlaceholderPageProps) {
   return (
-    <div className="min-h-[calc(100vh-64px-200px)] flex items-center justify-center">
-      <div className="text-center max-w-md px-4">
-        <div className="w-16 h-16 mx-auto mb-6 bg-[#A51C30]/10 rounded-sm flex items-center justify-center">
-          <span className="font-serif text-2xl font-bold text-[#A51C30]">P</span>
-        </div>
-        <h1 className="font-serif text-2xl font-bold text-[#1E1E1E] mb-3">{title}</h1>
-        <p className="text-[#6B7280] text-sm leading-relaxed mb-6">{description}</p>
+    <div className="max-w-[800px] mx-auto px-4 sm:px-6 py-16 text-center">
+      <h1 className="font-serif text-3xl font-bold text-[#1E1E1E] mb-4">{title}</h1>
+      <p className="text-sm text-[#6B7280] leading-relaxed mb-8 max-w-md mx-auto">
+        {description}
+      </p>
+      <div className="inline-block border border-[#E5E7EB] rounded-sm px-6 py-3">
+        <p className="text-sm text-[#9CA3AF]">此页面正在建设中，敬请期待</p>
+      </div>
+      <div className="mt-8">
         <Link
           href="/"
-          className="inline-block px-5 py-2 text-sm text-[#A51C30] border border-[#A51C30] rounded-sm hover:bg-[#A51C30] hover:text-white transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-[#A51C30] hover:text-[#8C1829] transition-colors"
         >
-          Back to Home
+          <ArrowLeft size={16} />
+          返回首页
         </Link>
       </div>
     </div>

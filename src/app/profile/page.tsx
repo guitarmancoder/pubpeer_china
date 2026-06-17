@@ -1,96 +1,121 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { User, Mail, Shield, LogOut } from 'lucide-react';
 import Link from 'next/link';
+import { User, LogOut, Settings } from 'lucide-react';
 
 interface UserProfile {
   id: string;
   email: string;
   username: string;
-  display_name: string;
+  display_name: string | null;
   role: string;
 }
 
 export default function ProfilePage() {
-  const router = useRouter();
   const [user, setUser] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const stored = localStorage.getItem('pppr_user');
     if (stored) {
-      try { setUser(JSON.parse(stored)); } catch { /* ignore */ }
+      try {
+        setUser(JSON.parse(stored));
+      } catch {
+        // invalid data
+      }
     }
-    setLoading(false);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('pppr_token');
     localStorage.removeItem('pppr_user');
-    router.push('/');
+    window.location.href = '/login';
   };
 
-  if (loading) {
-    return <div className="min-h-[calc(100vh-64px-200px)] flex items-center justify-center"><p className="text-[#6B7280]">Loading...</p></div>;
-  }
-
-  if (!user) {
+  if (!mounted) {
     return (
-      <div className="min-h-[calc(100vh-64px-200px)] flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-[#1E1E1E] font-serif text-xl mb-2">Not Logged In</p>
-          <p className="text-sm text-[#6B7280] mb-4">Please login to view your profile</p>
-          <Link href="/login" className="text-sm text-[#A51C30] hover:text-[#8C1829]">Go to Login</Link>
+      <div className="max-w-[800px] mx-auto px-4 py-16">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 bg-[#F3F4F6] rounded w-1/3" />
+          <div className="h-32 bg-[#F3F4F6] rounded" />
         </div>
       </div>
     );
   }
 
+  if (!user) {
+    return (
+      <div className="max-w-[800px] mx-auto px-4 py-16 text-center">
+        <User size={48} className="mx-auto text-[#E5E7EB] mb-4" />
+        <h1 className="font-serif text-2xl text-[#1E1E1E] mb-4">未登录</h1>
+        <p className="text-sm text-[#6B7280] mb-6">请先登录以查看您的个人资料</p>
+        <Link
+          href="/login"
+          className="inline-block px-6 py-2.5 bg-[#A51C30] text-white text-sm font-medium rounded-sm hover:bg-[#8C1829] transition-colors"
+        >
+          登录
+        </Link>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-[calc(100vh-64px-200px)] py-8">
-      <div className="max-w-[600px] mx-auto px-4 sm:px-6">
-        <h1 className="font-serif text-2xl font-bold text-[#1E1E1E] mb-6">Profile</h1>
-        <div className="bg-white border border-[#E5E7EB] rounded-sm p-6 sm:p-8">
-          <div className="flex items-center gap-4 mb-6 pb-6 border-b border-[#E5E7EB]">
-            <div className="w-16 h-16 rounded-full bg-[#A51C30]/10 flex items-center justify-center">
-              <User size={28} className="text-[#A51C30]" />
-            </div>
-            <div>
-              <h2 className="font-serif text-xl font-semibold text-[#1E1E1E]">{user.display_name || user.username}</h2>
-              <p className="text-sm text-[#6B7280]">@{user.username}</p>
-            </div>
+    <div className="max-w-[800px] mx-auto px-4 sm:px-6 py-8">
+      <h1 className="font-serif text-2xl font-bold text-[#1E1E1E] mb-8">个人资料</h1>
+
+      <div className="border border-[#E5E7EB] rounded-sm p-6 mb-6">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="w-16 h-16 bg-[#FEF2F2] rounded-full flex items-center justify-center">
+            <User size={32} className="text-[#A51C30]" />
           </div>
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <Mail size={16} className="text-[#6B7280]" />
-              <div><p className="text-xs text-[#6B7280]">Email</p><p className="text-sm text-[#1E1E1E]">{user.email}</p></div>
-            </div>
-            <div className="flex items-center gap-3">
-              <User size={16} className="text-[#6B7280]" />
-              <div><p className="text-xs text-[#6B7280]">Username</p><p className="text-sm text-[#1E1E1E]">{user.username}</p></div>
-            </div>
-            <div className="flex items-center gap-3">
-              <Shield size={16} className="text-[#6B7280]" />
-              <div>
-                <p className="text-xs text-[#6B7280]">Role</p>
-                <p className="text-sm text-[#1E1E1E]">{user.role === 'admin' ? 'Administrator' : 'User'}</p>
-              </div>
-            </div>
-          </div>
-          <div className="mt-6 pt-6 border-t border-[#E5E7EB] flex gap-3">
+          <div>
+            <h2 className="text-lg font-semibold text-[#1E1E1E]">
+              {user.display_name || user.username}
+            </h2>
+            <p className="text-sm text-[#6B7280]">@{user.username}</p>
             {user.role === 'admin' && (
-              <Link href="/admin" className="flex-1 py-2.5 text-sm text-center bg-[#A51C30] text-white rounded-sm hover:bg-[#8C1829] transition-colors">
-                Admin Panel
-              </Link>
+              <span className="inline-block mt-1 px-2 py-0.5 bg-[#A51C30] text-white text-xs rounded-sm">
+                管理员
+              </span>
             )}
-            <button onClick={handleLogout}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 text-sm text-[#6B7280] border border-[#E5E7EB] rounded-sm hover:border-[#A51C30] hover:text-[#A51C30] transition-colors">
-              <LogOut size={16} /> Logout
-            </button>
           </div>
         </div>
+
+        <div className="space-y-3">
+          <div className="flex items-center justify-between py-2 border-b border-[#E5E7EB]">
+            <span className="text-sm text-[#6B7280]">邮箱</span>
+            <span className="text-sm text-[#1E1E1E]">{user.email}</span>
+          </div>
+          <div className="flex items-center justify-between py-2 border-b border-[#E5E7EB]">
+            <span className="text-sm text-[#6B7280]">用户名</span>
+            <span className="text-sm text-[#1E1E1E]">{user.username}</span>
+          </div>
+          <div className="flex items-center justify-between py-2 border-b border-[#E5E7EB]">
+            <span className="text-sm text-[#6B7280]">角色</span>
+            <span className="text-sm text-[#1E1E1E]">{user.role === 'admin' ? '管理员' : '普通用户'}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex gap-3">
+        {user.role === 'admin' && (
+          <Link
+            href="/admin"
+            className="flex items-center gap-2 px-4 py-2.5 border border-[#E5E7EB] rounded-sm text-sm text-[#4B5563] hover:border-[#A51C30] hover:text-[#A51C30] transition-colors"
+          >
+            <Settings size={16} />
+            管理后台
+          </Link>
+        )}
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 px-4 py-2.5 border border-red-200 rounded-sm text-sm text-red-600 hover:bg-red-50 transition-colors"
+        >
+          <LogOut size={16} />
+          退出登录
+        </button>
       </div>
     </div>
   );
