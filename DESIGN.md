@@ -1,49 +1,49 @@
-# DESIGN.md - 学术同行评审社区 (PPPR)
+# DESIGN.md - Post-Publication Peer Review (PPPR)
 
-## 气质与意象
-- 灵感锚点：哈佛大学纪念教堂的深红砖墙，晨光穿过哥特式拱窗洒在大理石地面，空气中弥漫着旧书页的木质气息
-- 关键词：学术权威、克制优雅、经典永恒、知识殿堂
-- 整体感受：像走进一间百年图书馆的阅览室——安静、庄重、专注
+## Character & Imagery
+- Inspiration anchor: Deep red brick walls of Harvard Memorial Church, morning light streaming through Gothic arched windows onto marble floors, the air filled with the woody scent of aged book pages
+- Keywords: Academic authority, restrained elegance, timeless classic, hall of knowledge
+- Overall feeling: Like entering a century-old library reading room - quiet, dignified, focused
 
-## 视觉策略
-- 摄影/图像：无装饰性图片，仅在 Hero 区域使用纯色背景
-- 图形语言：极简线条分隔，无渐变、无装饰性图形元素
-- 大量留白，内容呼吸感强
+## Visual Strategy
+- Photography/imagery: No decorative images, solid color backgrounds only in Hero area
+- Graphic language: Minimalist line separators, no gradients, no decorative graphic elements
+- Generous whitespace, strong content breathing room
 
-## 配色方案
-- 主色：哈佛红 Crimson `#A51C30` — 灵感来自哈佛校徽的深红色
-- 背景：纯白 `#FFFFFF` — 如展开的论文纸
-- 文字：深灰 `#1E1E1E` — 如印刷墨色
-- 次要文字：`#6B7280` — 如铅笔批注
-- 边框：`#E5E7EB` — 极淡的纸面分隔线
-- 页脚背景：`#1E1E1E` 深灰 — 如书架的暗色木质
-- 悬停红：`#8C1829` — 加深红，如翻旧的书脊
+## Color Palette
+- Primary: Harvard Crimson `#A51C30` - inspired by Harvard's deep red crest
+- Background: Pure white `#FFFFFF` - like an open paper sheet
+- Text: Dark gray `#1E1E1E` - like printed ink
+- Secondary text: `#6B7280` - like pencil annotations
+- Borders: `#E5E7EB` - very subtle paper dividers
+- Footer background: `#1E1E1E` dark gray - like dark wood bookshelves
+- Hover red: `#8C1829` - deepened red, like aged book spines
 
-## 字体排版
-- 标题字体：`Noto Serif SC`（思源宋体）— 衬线体，学术权威感
-- 正文字体：系统默认无衬线（PingFang SC / Microsoft YaHei）
-- 标题字号：Hero 区域 3rem，页面标题 1.875rem，卡片标题 1.125rem
-- 行高：正文 1.75，标题 1.3
-- 排版节奏：段落间距宽松，卡片内边距充足
+## Typography
+- Title font: `Noto Serif SC` - serif, academic authority
+- Body font: System default sans-serif (PingFang SC / Microsoft YaHei)
+- Title sizes: Hero area 3rem, page titles 1.875rem, card titles 1.125rem
+- Line height: Body 1.75, titles 1.3
+- Typography rhythm: Loose paragraph spacing, generous card padding
 
-## 动效与交互
-- 过渡：所有 hover/focus 使用 200ms ease-in-out
-- 按钮 hover：背景色加深，无位移
-- 卡片 hover：边框色变为哈佛红，极淡阴影浮现
-- 页面切换：无动画，保持学术严肃感
+## Motion & Interaction
+- Transitions: All hover/focus use 200ms ease-in-out
+- Button hover: Background darkens, no displacement
+- Card hover: Border turns crimson, very subtle shadow appears
+- Page transitions: No animation, maintaining academic seriousness
 
-## 页面结构
-- 导航栏：白底，左侧 Logo + 站名（衬线体），右侧导航链接，底部 1px 分隔线
-- Hero 区域：哈佛红背景，白色衬线大标题，副标题无衬线
-- 内容区：最大宽度 1200px 居中，两侧充足留白
-- 卡片：白色背景，1px 边框，极小圆角(2px)，无阴影或极淡阴影
-- 页脚：深灰背景，白色文字，多列链接布局
+## Page Structure
+- Navbar: White background, Logo + site name (serif) on left, navigation links on right, 1px bottom divider
+- Hero area: Crimson background, white serif large title, sans-serif subtitle
+- Content area: Max width 1200px centered, generous side whitespace
+- Cards: White background, 1px border, minimal border-radius (2px), no shadow or very subtle shadow
+- Footer: Dark gray background, white text, multi-column link layout
 
-## 设计禁忌
-- 不要使用圆角大于 4px 的元素
-- 不要使用蓝紫色渐变
-- 不要使用 emoji 作为装饰
-- 不要使用卡片悬浮放大效果
-- 不要使用彩色图标或多色插画
-- 不要使用毛玻璃/模糊效果
-- 不要使用动画背景或粒子效果
+## Design Taboos
+- Do not use elements with border-radius greater than 4px
+- Do not use blue-purple gradients
+- Do not use emoji as decoration
+- Do not use card hover zoom effects
+- Do not use colorful icons or multi-color illustrations
+- Do not use glassmorphism/blur effects
+- Do not use animated backgrounds or particle effects

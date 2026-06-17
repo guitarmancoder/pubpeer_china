@@ -13,18 +13,17 @@ const notoSerifSC = Noto_Serif_SC({
 
 export const metadata: Metadata = {
   title: {
-    default: '学术同行评审社区 - 开放、公正的论文评审平台',
-    template: '%s | 学术同行评审社区',
+    default: 'PPPR - Post-Publication Peer Review',
+    template: '%s | PPPR',
   },
   description:
-    '学术同行评审社区(PPPR)是一个开放的出版后同行评审平台，致力于推动学术透明与科研诚信。',
+    'PPPR is an open post-publication peer review platform dedicated to promoting academic transparency and research integrity.',
   keywords: [
-    '同行评审',
-    '学术评审',
-    '出版后评审',
-    '论文评审',
-    '科研诚信',
-    '学术透明',
+    'peer review',
+    'post-publication review',
+    'academic review',
+    'research integrity',
+    'academic transparency',
   ],
 };
 
@@ -34,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-CN" className={notoSerifSC.variable}>
+    <html lang="en" className={notoSerifSC.variable}>
       <body className="min-h-screen flex flex-col antialiased font-sans">
         <Navbar />
         <main className="flex-1">{children}</main>

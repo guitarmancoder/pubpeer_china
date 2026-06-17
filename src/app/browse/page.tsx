@@ -1,145 +1,92 @@
 'use client';
 
-import { Suspense, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { MessageSquare, Clock, TrendingUp, Plus } from 'lucide-react';
+import { MessageSquare, TrendingUp, Clock } from 'lucide-react';
 
 interface Paper {
   id: string;
   title: string;
   authors: string;
-  doi: string | null;
-  journal: string | null;
-  publish_date: string | null;
+  journal: string;
   comment_count: number;
-  created_at: string;
+  publish_date: string;
 }
 
-function BrowseContent() {
+const tabs = [
+  { key: 'latest', label: 'Latest Reviews', icon: Clock },
+  { key: 'hot', label: 'Trending Discussions', icon: TrendingUp },
+  { key: 'recent', label: 'Recently Added', icon: MessageSquare },
+];
+
+export default function BrowsePage() {
   const searchParams = useSearchParams();
   const initialType = searchParams.get('type') || 'latest';
-  const [type, setType] = useState(initialType);
+  const [activeTab, setActiveTab] = useState(initialType);
   const [papers, setPapers] = useState<Paper[]>([]);
   const [loading, setLoading] = useState(true);
-  const [pagination, setPagination] = useState({ page: 1, totalPages: 1, total: 0 });
 
   useEffect(() => {
-    fetchPapers(type, 1);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [type]);
-
-  const fetchPapers = async (browseType: string, page: number) => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/browse?type=${browseType}&page=${page}`);
-      const data = await res.json();
-      if (data.success) {
-        setPapers(data.data);
-        setPagination(data.pagination);
+    const fetchPapers = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/browse?type=${activeTab}&page=1`);
+        const data = await res.json();
+        setPapers(data.data || []);
+      } catch (error) {
+        console.error('Failed to fetch papers:', error);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error('Failed to fetch:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const tabs = [
-    { value: 'latest', label: '最新评论', icon: Clock },
-    { value: 'hot', label: '最热讨论', icon: TrendingUp },
-    { value: 'recent', label: '最近添加', icon: Plus },
-  ];
+    };
+    fetchPapers();
+  }, [activeTab]);
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-8">
-      <h1 className="font-serif text-2xl font-bold text-[#1E1E1E] mb-6">浏览论文</h1>
-
-      {/* Tabs */}
-      <div className="flex gap-1 border-b border-[#E5E7EB] mb-6">
-        {tabs.map((tab) => (
-          <button
-            key={tab.value}
-            onClick={() => setType(tab.value)}
-            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
-              type === tab.value
-                ? 'border-[#A51C30] text-[#A51C30]'
-                : 'border-transparent text-[#6B7280] hover:text-[#1E1E1E]'
-            }`}
-          >
-            <tab.icon size={16} />
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Paper List */}
-      {loading ? (
-        <div className="space-y-3">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-20 bg-[#F3F4F6] rounded-sm animate-pulse" />
+    <div className="min-h-[calc(100vh-64px-200px)] py-8">
+      <div className="max-w-[900px] mx-auto px-4 sm:px-6">
+        <h1 className="font-serif text-2xl font-bold text-[#1E1E1E] mb-6">Browse Papers</h1>
+        <div className="flex gap-1 mb-6 border-b border-[#E5E7EB]">
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === tab.key
+                  ? 'border-[#A51C30] text-[#A51C30]'
+                  : 'border-transparent text-[#6B7280] hover:text-[#1E1E1E]'
+              }`}
+            >
+              <tab.icon size={16} />
+              {tab.label}
+            </button>
           ))}
         </div>
-      ) : (
-        <>
-          <div className="space-y-3">
-            {papers.map((paper) => (
+        <div className="space-y-3">
+          {loading ? (
+            <div className="py-12 text-center text-[#6B7280] text-sm">Loading...</div>
+          ) : papers.length === 0 ? (
+            <div className="py-12 text-center text-[#6B7280] text-sm">No papers found</div>
+          ) : (
+            papers.map((paper) => (
               <Link
                 key={paper.id}
                 href={`/papers/${paper.id}`}
-                className="block p-4 border border-[#E5E7EB] rounded-sm hover:border-[#A51C30] transition-colors duration-200 group"
+                className="block p-5 bg-white border border-[#E5E7EB] rounded-sm hover:border-[#A51C30] transition-colors group"
               >
-                <h3 className="text-sm font-medium text-[#1E1E1E] group-hover:text-[#A51C30] transition-colors mb-2">
-                  {paper.title}
-                </h3>
-                <div className="flex flex-wrap items-center gap-3 text-xs text-[#6B7280]">
-                  <span>{paper.authors}</span>
-                  {paper.journal && <span className="font-medium">{paper.journal}</span>}
-                  {paper.publish_date && <span>{paper.publish_date}</span>}
-                  <span className="flex items-center gap-1 text-[#A51C30] font-medium">
-                    <MessageSquare size={12} />
-                    {paper.comment_count} 条评论
-                  </span>
+                <h3 className="text-base font-medium text-[#1E1E1E] group-hover:text-[#A51C30] mb-2">{paper.title}</h3>
+                <p className="text-sm text-[#6B7280] mb-2">{paper.authors}</p>
+                <div className="flex items-center gap-4 text-xs text-[#6B7280]">
+                  <span>{paper.journal}</span>
+                  <span>{paper.publish_date}</span>
+                  <span className="flex items-center gap-1"><MessageSquare size={12} />{paper.comment_count} comments</span>
                 </div>
               </Link>
-            ))}
-          </div>
-
-          {/* Pagination */}
-          {pagination.totalPages > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
-              {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => fetchPapers(type, page)}
-                  className={`w-8 h-8 text-sm rounded-sm transition-colors ${
-                    page === pagination.page
-                      ? 'bg-[#A51C30] text-white'
-                      : 'text-[#6B7280] hover:bg-[#F3F4F6]'
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
-            </div>
+            ))
           )}
-        </>
-      )}
-    </div>
-  );
-}
-
-export default function BrowsePage() {
-  return (
-    <Suspense fallback={
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-8">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-[#F3F4F6] rounded w-1/4" />
-          <div className="h-12 bg-[#F3F4F6] rounded" />
         </div>
       </div>
-    }>
-      <BrowseContent />
-    </Suspense>
+    </div>
   );
 }
