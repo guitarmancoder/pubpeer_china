@@ -1,73 +1,44 @@
 import type { Metadata } from 'next';
-import { Inspector } from 'react-dev-inspector';
+import { Noto_Serif_SC } from 'next/font/google';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import './globals.css';
+
+const notoSerifSC = Noto_Serif_SC({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-heading',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: {
-    default: '新应用 | 扣子编程',
-    template: '%s | 扣子编程',
+    default: '学术同行评审社区 - 开放、公正的论文评审平台',
+    template: '%s | 学术同行评审社区',
   },
   description:
-    '扣子编程是一款一站式云端 Vibe Coding 开发平台。通过对话轻松构建智能体、工作流和网站，实现从创意到上线的无缝衔接。',
+    '学术同行评审社区(PPPR)是一个开放的出版后同行评审平台，致力于推动学术透明与科研诚信。',
   keywords: [
-    '扣子编程',
-    'Coze Code',
-    'Vibe Coding',
-    'AI 编程',
-    '智能体搭建',
-    '工作流搭建',
-    '网站搭建',
-    '网站部署',
-    '全栈开发',
-    'AI 工程师',
+    '同行评审',
+    '学术评审',
+    '出版后评审',
+    '论文评审',
+    '科研诚信',
+    '学术透明',
   ],
-  authors: [{ name: 'Coze Code Team', url: 'https://code.coze.cn' }],
-  generator: 'Coze Code',
-  // icons: {
-  //   icon: '',
-  // },
-  openGraph: {
-    title: '扣子编程 | 你的 AI 工程师已就位',
-    description:
-      '我正在使用扣子编程 Vibe Coding，让创意瞬间上线。告别拖拽，拥抱心流。',
-    url: 'https://code.coze.cn',
-    siteName: '扣子编程',
-    locale: 'zh_CN',
-    type: 'website',
-    // images: [
-    //   {
-    //     url: '',
-    //     width: 1200,
-    //     height: 630,
-    //     alt: '扣子编程 - 你的 AI 工程师',
-    //   },
-    // ],
-  },
-  // twitter: {
-  //   card: 'summary_large_image',
-  //   title: 'Coze Code | Your AI Engineer is Here',
-  //   description:
-  //     'Build and deploy full-stack applications through AI conversation. No env setup, just flow.',
-  //   // images: [''],
-  // },
-  robots: {
-    index: true,
-    follow: true,
-  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  const isDev = process.env.COZE_PROJECT_ENV === 'DEV';
-
+}) {
   return (
-    <html lang="en">
-      <body className={`antialiased`}>
-        {isDev && <Inspector />}
-        {children}
+    <html lang="zh-CN" className={notoSerifSC.variable}>
+      <body className="min-h-screen flex flex-col antialiased font-sans">
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );
